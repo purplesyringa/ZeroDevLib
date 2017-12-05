@@ -33,6 +33,32 @@ class ZeroFS {
 			}
 		});
 	}
+	peekFile(file, offset, length, bytes, required) {
+		return this.page.cmd("filePeek", [
+			file, // file
+			offset, // offset
+			length, // reading size
+			required, // required (wait until file exists)
+			"base64", // text or base64
+			300 // timeout
+		])
+			.then(res => {
+				if(res === null || res === false) {
+					return Promise.reject("File doesn't exist: " + file);
+				} else {
+					return Promise.resolve(this.fromBase64(res, bytes));
+				}
+			})
+			.catch(e => {
+				if(e && e.error && e.error.indexOf("Unknown") > -1) {
+					// Old ZeroNet version
+					return this.readFile(file, bytes, required)
+						.then(res => res.slice(offset, offset + length));
+				}
+
+				return Promise.reject(e);
+			});
+	}
 	writeFile(file, content, bytes) {
 		return this.page.cmd("fileWrite", [
 			file, // file
