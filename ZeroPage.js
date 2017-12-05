@@ -6,8 +6,6 @@ class ZeroPage {
 		this.frame = frame;
 		this.progressId = 0;
 
-		this.savedPrivateKey = "";
-
 		this.initEventListeners();
 	}
 
@@ -176,27 +174,21 @@ class ZeroPage {
 	}
 
 	/****************************** Site control ******************************/
-	getPrivateKey() {
-		if(this.savedPrivateKey) {
-			return Promise.resolve(this.savedPrivateKey);
-		}
-
-		return this.getSiteInfo()
-			.then(siteInfo => {
-				if(siteInfo.privatekey) {
-					return "stored";
+	getPrivateKey(file) {
+		let auth = this.auth.getAuth();
+		return this.cmd("fileRules", [file])
+			.then(rules => {
+				if(auth && rules.signers.indexOf(auth.address) > -1) {
+					return null;
 				}
 
-				return this.prompt("Enter your private key:");
-			}).then(privatekey => {
-				this.savedPrivateKey = privatekey;
-				return privatekey;
+				return "stored";
 			});
 	}
 	sign(file) {
 		file = file || "content.json";
 
-		return this.getPrivateKey()
+		return this.getPrivateKey(file)
 			.then(privatekey => {
 				return this.cmd(
 					"siteSign",
@@ -205,7 +197,8 @@ class ZeroPage {
 						file // file to sign
 					]
 				);
-			}).then(res => {
+			})
+			.then(res => {
 				if(res === "ok") {
 					return Promise.resolve(file);
 				} else {
@@ -216,7 +209,7 @@ class ZeroPage {
 	publish(file) {
 		file = file || "content.json";
 
-		return this.getPrivateKey()
+		return this.getPrivateKey(file)
 			.then(privatekey => {
 				return this.cmd(
 					"sitePublish",
@@ -226,7 +219,8 @@ class ZeroPage {
 						true // sign before publish
 					]
 				);
-			}).then(res => {
+			})
+			.then(res => {
 				if(res === "ok") {
 					return Promise.resolve(file);
 				} else {
