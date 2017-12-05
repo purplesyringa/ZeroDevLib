@@ -1,4 +1,4 @@
-class ZeroBigFiles {
+class ZeroBigFiles extends ZeroOptional {
 	constructor(page) {
 		if(typeof page != "object" || !page instanceof ZeroPage) {
 			throw new Error("page should be an instance of ZeroPage");
