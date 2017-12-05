@@ -1,4 +1,4 @@
-class ZeroOptional {
+class ZeroOptional extends ZeroFS {
 	constructor(page) {
 		if(typeof page != "object" || !page instanceof ZeroPage) {
 			throw new Error("page should be an instance of ZeroPage");
@@ -19,31 +19,8 @@ class ZeroOptional {
 				return Promise.resolve(children.indexOf(basePath) > -1);
 			});
 	}
-	readFile(file) {
-		return this.page.cmd("fileGet", [
-			file, // file
-			true, // required (wait until file exists)
-			"text", // text or base64
-			5000 // timeout
-		]).then(res => {
-			if(res === null || res === false) {
-				return Promise.reject("File doesn't exist: " + file);
-			} else {
-				return Promise.resolve(res);
-			}
-		});
-	}
-	writeFile(file, content) {
-		return this.page.cmd("fileWrite", [
-			file, // file
-			this.toBase64(content) // base64-encoded content
-		]).then(res => {
-			if(res === "ok") {
-				return Promise.resolve(file);
-			} else {
-				return Promise.reject(res);
-			}
-		});
+	readFile(file, bytes) {
+		return super.readFile(file, bytes, true);
 	}
 	deleteFile(file) {
 		return this.page.cmd("optionalFileDelete", [
@@ -54,7 +31,7 @@ class ZeroOptional {
 	}
 
 	getFileList(directory, recursive) {
-		return this.page.cmd("fileGet", ["content.json", true, "text", 300])
+		return this.readFile("content.json")
 			.then(json => {
 				let files = Object.keys(JSON.parse(json).files_optional || {});
 				return ZeroPage.async.map(files, file => this.page.cmd("optionalFileInfo", [file]));
