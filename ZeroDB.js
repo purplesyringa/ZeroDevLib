@@ -126,6 +126,47 @@ class ZeroDB {
 				);
 			});
 	}
+	removeRow(dataFile, contentFile, table, f) {
+		let privatekey;
+		return this.getPrivateKey(contentFile)
+			.then(p => {
+
+				return this.fs.readFile(dataFile);
+			})
+			.then(data => {
+				return JSON.parse(data);
+			}, () => {
+				return {};
+			})
+			.then(data => {
+				if(typeof data[table] != "object" || !(data[table] instanceof Array)) {
+					data[table] = [];
+				}
+
+				data[table] = data[table].filter(f);
+
+				return this.fs.writeFile(dataFile, JSON.stringify(data, null, 4));
+			})
+			.then(() => {
+				return this.page.cmd(
+					"siteSign",
+					[
+						privatekey, // private key
+						contentFile // file to sign
+					]
+				);
+			})
+			.then(() => {
+				this.page.cmd(
+					"sitePublish",
+					[
+						privatekey, // private key
+						contentFile, // file to publish
+						false // sign before publish
+					]
+				);
+			});
+	}
 
 	changePair(dataFile, contentFile, table, key, value) {
 		let privatekey;
