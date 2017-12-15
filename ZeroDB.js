@@ -143,7 +143,7 @@ class ZeroDB {
 					data[table] = [];
 				}
 
-				data[table] = data[table].filter(f);
+				data[table] = data[table].filter(val => !f(val));
 
 				return this.fs.writeFile(dataFile, JSON.stringify(data, null, 4));
 			})
