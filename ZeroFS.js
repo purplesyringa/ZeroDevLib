@@ -115,8 +115,8 @@ class ZeroFS {
 		if(bytes == "arraybuffer") {
 			let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-			let resultingSize = str.length / 4 * 3;
 			str = str.replace(/=+$/g, "");
+			let resultingSize = Math.floor(str.length / 4 * 3);
 
 			let result = new Uint8Array(resultingSize);
 			let strPos = 0;
