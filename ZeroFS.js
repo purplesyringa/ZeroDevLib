@@ -170,9 +170,13 @@ class ZeroFS {
 						req.overrideMimeType("text/plain; charset=utf-8");
 					}
 
-					req.setRequestHeader("Range", "bytes=" + offset + "-" + (offset + length));
+					req.setRequestHeader("Range", "bytes=" + offset + "-" + (offset + length - 1));
 
 					req.onload = e => {
+						if(req.status != 206) {
+							reject(req.status);
+						}
+
 						if(bytes == "arraybuffer") {
 							resolve(new Uint8Array(req.response));
 						} else {
