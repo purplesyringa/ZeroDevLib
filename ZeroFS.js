@@ -146,4 +146,45 @@ class ZeroFS {
 			return text;
 		}
 	}
+
+	/* Ajax */
+	peekFile(file, offset, length, bytes) {
+		let siteInfo;
+		return this.page.getSiteInfo()
+			.then(s => {
+				siteInfo = s;
+				return this.page.cmd("wrapperGetAjaxKey");
+			})
+			.then(ajaxKey => {
+				return new Promise((resolve, reject) => {
+					let path = "/" + siteInfo.address + "/" + file + "?ajax_key=" + ajaxKey;
+
+					let req = new XMLHttpRequest();
+					req.open("GET", path);
+
+					if(bytes == "arraybuffer") {
+						req.responseType = "arraybuffer";
+					} else if(bytes) {
+						req.overrideMimeType("text/plain; charset=x-user-defined");
+					} else {
+						req.overrideMimeType("text/plain; charset=utf-8");
+					}
+
+					req.setRequestHeader("Range", "bytes=" + offset + "-" + (offset + length));
+
+					req.onload = e => {
+						if(bytes == "arraybuffer") {
+							resolve(new Uint8Array(req.response));
+						} else {
+							resolve(req.responseText);
+						}
+					};
+					req.onerror = e => {
+						reject(e);
+					};
+
+					req.send(null);
+				});
+			});
+	}
 }
