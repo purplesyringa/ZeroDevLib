@@ -66,3 +66,7 @@ class ZeroOptionalProxy {
 		return this.optional.isDownloaded(file);
 	}
 };
+
+if(typeof module.exports != "undefined") {
+	module.exports = ZeroOptionalProxy;
+}

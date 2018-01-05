@@ -85,3 +85,7 @@ class ZeroAuth {
 		return address.replace(/^(.*)@(.*)/, "[$1]$2");
 	}
 };
+
+if(typeof module.exports != "undefined") {
+	module.exports = ZeroAuth;
+}

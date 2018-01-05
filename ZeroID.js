@@ -155,3 +155,7 @@ class ZeroID {
 			});
 	}
 };
+
+if(typeof module.exports != "undefined") {
+	module.exports = ZeroID;
+}

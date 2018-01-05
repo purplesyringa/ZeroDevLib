@@ -33,3 +33,7 @@ class ZeroBigFiles extends ZeroOptional {
 			});
 	}
 };
+
+if(typeof module.exports != "undefined") {
+	module.exports = ZeroBigFiles;
+}

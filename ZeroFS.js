@@ -192,3 +192,7 @@ class ZeroFS {
 			});
 	}
 }
+
+if(typeof module.exports != "undefined") {
+	module.exports = ZeroFS;
+}

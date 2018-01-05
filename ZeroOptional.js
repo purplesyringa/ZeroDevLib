@@ -131,3 +131,7 @@ class ZeroOptional extends ZeroFS {
 			});
 	}
 };
+
+if(typeof module.exports != "undefined") {
+	module.exports = ZeroOptional;
+}

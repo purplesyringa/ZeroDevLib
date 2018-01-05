@@ -238,3 +238,7 @@ class ZeroDB {
 			});
 	}
 };
+
+if(typeof module.exports != "undefined") {
+	module.exports = ZeroDB;
+}
