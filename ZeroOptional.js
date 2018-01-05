@@ -34,7 +34,10 @@ class ZeroOptional extends ZeroFS {
 		return this.readFile("content.json")
 			.then(json => {
 				let files = Object.keys(JSON.parse(json).files_optional || {});
-				return ZeroPage.async.map(files, file => this.page.cmd("optionalFileInfo", [file]));
+				return Promise.all(
+					files
+						.map(file => this.page.cmd("optionalFileInfo", [file]))
+				);
 			})
 			.then(files => {
 				files = files

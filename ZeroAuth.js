@@ -49,7 +49,7 @@ class ZeroAuth {
 		} else {
 			return new Promise((resolve, reject) => {
 				this.page.once("setSiteInfo", () => {
-					ZeroPage.async.setTimeout(200)
+					asyncTimeout(200)
 						.then(() => {
 							return this.page.getSiteInfo();
 						}).then(siteInfo => {
@@ -88,4 +88,8 @@ class ZeroAuth {
 
 if(typeof module.exports != "undefined") {
 	module.exports = ZeroAuth;
+}
+
+function asyncTimeout(time) {
+	return new Promise(resolve => setTimeout(resolve, time))
 }
