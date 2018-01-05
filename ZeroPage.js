@@ -113,8 +113,12 @@ class ZeroPage {
 			once: {}
 		};
 
+		let initialOnRequest = this.frame.onRequest;
 		this.frame.onRequest = (cmd, msg) => {
 			this.emit(cmd, msg);
+			if(typeof initialOnRequest == "function") {
+				initialOnRequest(cmd, msg);
+			}
 		};
 	}
 	on(cmd, callback) {
