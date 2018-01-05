@@ -1,6 +1,6 @@
 class ZeroAuth {
 	constructor(page, acceptedDomains) {
-		if(typeof page != "object" || !page instanceof ZeroPage) {
+		if(typeof page != "object" || !page.isZeroPage) {
 			throw new Error("page should be an instance of ZeroPage");
 		}
 		this.page = page;

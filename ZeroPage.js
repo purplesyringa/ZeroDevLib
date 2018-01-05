@@ -1,10 +1,11 @@
 class ZeroPage {
 	constructor(frame) {
-		if(typeof frame != "object" || !frame instanceof ZeroFrame) {
+		if(typeof frame != "object" || !frame.onMessage) {
 			throw new Error("frame should be an instance of ZeroFrame");
 		}
 		this.frame = frame;
 		this.progressId = 0;
+		this.isZeroPage = true;
 
 		this.initEventListeners();
 	}
