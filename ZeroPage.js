@@ -118,7 +118,7 @@ class ZeroPage {
 		this.frame.onRequest = (cmd, msg) => {
 			this.emit(cmd, msg);
 			if(typeof initialOnRequest == "function") {
-				initialOnRequest.call(this, cmd, msg);
+				initialOnRequest.call(this.frame, cmd, msg);
 			}
 		};
 	}
