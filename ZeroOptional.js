@@ -1,4 +1,13 @@
-class ZeroOptional extends ZeroFS {
+let FS;
+if(typeof ZeroFS != "undefined") {
+	// In browser
+	FS = ZeroFS;
+} else {
+	// In node
+	FS = require("./ZeroFS");
+}
+
+class ZeroOptional extends FS {
 	constructor(page) {
 		if(typeof page != "object" || !page.isZeroPage) {
 			throw new Error("page should be an instance of ZeroPage");

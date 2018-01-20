@@ -1,4 +1,13 @@
-class ZeroBigFiles extends ZeroOptional {
+let Optional;
+if(typeof ZeroOptional != "undefined") {
+	// In browser
+	Optional = ZeroOptional;
+} else {
+	// In node
+	Optional = require("./ZeroOptional");
+}
+
+class ZeroBigFiles extends Optional {
 	constructor(page) {
 		if(typeof page != "object" || !page.isZeroPage) {
 			throw new Error("page should be an instance of ZeroPage");
