@@ -1,0 +1,25 @@
+{
+  "name": "zero-dev-lib",
+  "version": "1.0.0",
+  "description": "Libraries for ZeroNet",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imachug/ZeroDevLib.git"
+  },
+  "keywords": [
+    "zeronet",
+    "library",
+    "p2p",
+    "peer-to-peer"
+  ],
+  "author": "Ivanq",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/imachug/ZeroDevLib/issues"
+  },
+  "homepage": "https://github.com/imachug/ZeroDevLib#readme"
+}
