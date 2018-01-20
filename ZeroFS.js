@@ -193,6 +193,6 @@ class ZeroFS {
 	}
 }
 
-if(typeof module.exports != "undefined") {
+if(typeof module != "undefined" && typeof module.exports != "undefined") {
 	module.exports = ZeroFS;
 }
