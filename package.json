@@ -1,6 +1,6 @@
 {
   "name": "zero-dev-lib",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Libraries for ZeroNet",
   "main": "main.js",
   "scripts": {
@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/imachug/ZeroDevLib/issues"
   },
-  "homepage": "https://github.com/imachug/ZeroDevLib#readme"
+  "homepage": "https://github.com/imachug/ZeroDevLib#readme",
+  "dependencies": {
+    "workerout": "^1.0.0"
+  }
 }
