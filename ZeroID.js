@@ -11,7 +11,7 @@ if(typeof WorkerOut != "undefined") {
 	WorkerOut_ = WorkerOut;
 } else {
 	// In node
-	WorkerOut_ = require("worker-out");
+	WorkerOut_ = require("workerout");
 }
 
 class ZeroID {
