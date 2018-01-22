@@ -1,3 +1,19 @@
+let FS, Optional;
+if(typeof ZeroFS != "undefined") {
+	// In browser
+	FS = ZeroFS;
+} else {
+	// In node
+	FS = require("./ZeroFS");
+}
+if(typeof ZeroOptional != "undefined") {
+	// In browser
+	Optional = ZeroOptional;
+} else {
+	// In node
+	Optional = require("./ZeroOptional");
+}
+
 class ZeroOptionalProxy {
 	constructor(page) {
 		if(typeof page != "object" || !page.isZeroPage) {
@@ -5,8 +21,8 @@ class ZeroOptionalProxy {
 		}
 		this.page = page;
 
-		this.fs = new ZeroFS(page);
-		this.optional = new ZeroOptional(page);
+		this.fs = new FS(page);
+		this.optional = new Optional(page);
 	}
 
 	fileExists(file) {

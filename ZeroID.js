@@ -1,3 +1,19 @@
+let FS, WorkerOut_;
+if(typeof ZeroFS != "undefined") {
+	// In browser
+	FS = ZeroFS;
+} else {
+	// In node
+	FS = require("./ZeroFS");
+}
+if(typeof WorkerOut != "undefined") {
+	// In browser
+	WorkerOut_ = WorkerOut;
+} else {
+	// In node
+	WorkerOut_ = require("worker-out");
+}
+
 class ZeroID {
 	constructor(page) {
 		if(typeof page != "object" || !page.isZeroPage) {
@@ -5,7 +21,7 @@ class ZeroID {
 		}
 
 		this.page = page;
-		this.fs = new ZeroFS(page);
+		this.fs = new FS(page);
 
 		this.cache = {};
 	}
@@ -16,7 +32,7 @@ class ZeroID {
 			return Promise.resolve(this.cache[cache]);
 		}
 
-		let worker = new WorkerOut();
+		let worker = new WorkerOut_();
 
 		return this.fs.readFile("cors-1iD5ZQJMNXu43w1qLB8sfdHVKppVMduGz/" + name, false, true)
 			.then(users => {

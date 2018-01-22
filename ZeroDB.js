@@ -1,3 +1,19 @@
+let FS, Auth;
+if(typeof ZeroFS != "undefined") {
+	// In browser
+	FS = ZeroFS;
+} else {
+	// In node
+	FS = require("./ZeroFS");
+}
+if(typeof ZeroAuth != "undefined") {
+	// In browser
+	Auth = ZeroAuth;
+} else {
+	// In node
+	Auth = require("./ZeroAuth");
+}
+
 class ZeroDB {
 	constructor(page) {
 		if(typeof page != "object" || !page.isZeroPage) {
@@ -5,8 +21,8 @@ class ZeroDB {
 			return;
 		}
 		this.page = page;
-		this.fs = new ZeroFS(page);
-		this.auth = new ZeroAuth(page);
+		this.fs = new FS(page);
+		this.auth = new Auth(page);
 	}
 
 	query(query, placeholders) {
