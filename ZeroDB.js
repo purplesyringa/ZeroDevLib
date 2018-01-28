@@ -48,9 +48,8 @@ class ZeroDB {
 			});
 	}
 
-	insertRow(dataFile, contentFile, table, row, autoIncrement) {
-		let privatekey;
-		return this.getPrivateKey(contentFile)
+	insertRow(dataFile, contentFile, table, row, autoIncrement, privatekey) {
+		return (privatekey !== undefined ? Promise.resolve(privatekey) : this.getPrivateKey(contentFile))
 			.then(p => {
 				privatekey = p;
 
@@ -100,9 +99,8 @@ class ZeroDB {
 				return row;
 			});
 	}
-	changeRow(dataFile, contentFile, table, f) {
-		let privatekey;
-		return this.getPrivateKey(contentFile)
+	changeRow(dataFile, contentFile, table, f, privatekey) {
+		return (privatekey !== undefined ? Promise.resolve(privatekey) : this.getPrivateKey(contentFile))
 			.then(p => {
 				privatekey = p;
 
@@ -142,9 +140,8 @@ class ZeroDB {
 				);
 			});
 	}
-	removeRow(dataFile, contentFile, table, f) {
-		let privatekey;
-		return this.getPrivateKey(contentFile)
+	removeRow(dataFile, contentFile, table, f, privatekey) {
+		return (privatekey !== undefined ? Promise.resolve(privatekey) : this.getPrivateKey(contentFile))
 			.then(p => {
 
 				return this.fs.readFile(dataFile);
@@ -184,9 +181,8 @@ class ZeroDB {
 			});
 	}
 
-	changePair(dataFile, contentFile, table, key, value) {
-		let privatekey;
-		return this.getPrivateKey(contentFile)
+	changePair(dataFile, contentFile, table, key, value, privatekey) {
+		return (privatekey !== undefined ? Promise.resolve(privatekey) : this.getPrivateKey(contentFile))
 			.then(p => {
 				privatekey = p;
 
