@@ -109,7 +109,46 @@ class ZeroFS {
 	}
 
 	toBase64(str, bytes) {
-		return btoa(bytes ? str : unescape(encodeURIComponent(str)));
+		if(bytes == "arraybuffer") {
+			let res = "";
+			const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+			str = new Uint8Array(str);
+
+			for(let i = 0; i < str.byteLength; i += 3) {
+				const chunk = (str[i] << 16) | (str[i + 1] << 8) | str[i + 2];
+
+				const a = (chunk & 16515072) >> 18;
+				const b = (chunk & 258048) >> 12;
+				const c = (chunk & 4032) >> 6;
+				const d = chunk & 63;
+
+				res += chars[a] + chars[b] + chars[c] + chars[d];
+			}
+
+
+			const additional = str.byteLength % 3;
+			const mainLength = str.byteLength - str.byteLength % 3;
+
+			if(additional == 1) {
+				const chunk = str[mainLength];
+
+				const a = (chunk & 252) >> 2;
+				const b = (chunk & 3) << 4;
+				res += chars[a] + chars[b] + "==";
+			} else if(additional == 2) {
+				const chunk = (str[mainLength] << 8) | str[mainLength + 1];
+
+				const a = (chunk & 64512) >> 10;
+				const b = (chunk & 1008) >> 4;
+				const c = (chunk & 15) << 2;
+				res += chars[a] + chars[b] + chars[c] + "=";
+			}
+
+			return res;
+		} else {
+			return btoa(bytes ? str : unescape(encodeURIComponent(str)));
+		}
 	}
 	fromBase64(str, bytes) {
 		if(bytes == "arraybuffer") {
