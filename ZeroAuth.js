@@ -6,7 +6,7 @@ class ZeroAuth {
 		this.page = page;
 
 		if(acceptedDomains) {
-			if(typeof acceptedDomains != "object" || !acceptedDomains instanceof Array) {
+			if(typeof acceptedDomains != "object" || !(acceptedDomains instanceof Array)) {
 				throw new Error("acceptedDomains should be an instance of Array");
 			}
 			this.acceptedDomains = acceptedDomains;
