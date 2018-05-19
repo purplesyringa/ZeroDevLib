@@ -7,14 +7,6 @@ class RemoteZeroFS {
 		this.address = address;
 	}
 
-	cmdAs(cmd, params) {
-		return this.page.cmd("as", [
-			this.address,
-			cmd,
-			params
-		]);
-	}
-
 	fileExists(file) {
 		if(file == "") { // root
 			return Promise.resolve(true); // the following check will fail for root
@@ -29,8 +21,8 @@ class RemoteZeroFS {
 			});
 	}
 	readFile(file, bytes, required) {
-		return this.cmdAs("fileGet", [
-			file, // file
+		return this.page.cmd("fileGet", [
+			"cors-" + this.address + "/" + file, // file
 			required, // required (wait until file exists)
 			"base64", // text or base64
 			300 // timeout
@@ -50,8 +42,8 @@ class RemoteZeroFS {
 	}
 
 	readDirectory(dir, recursive) {
-		return this.cmdAs("fileList", [
-			dir, // directory
+		return this.page.cmd("fileList", [
+			"cors-" + this.address + "/" + dir, // directory
 		]).then(res => {
 			if(recursive) {
 				return res.sort(); // If recursive, return as given
@@ -78,8 +70,8 @@ class RemoteZeroFS {
 		let relative = dir.pop();
 		dir = dir.join("/");
 
-		return this.cmdAs("fileList", [
-			dir, // directory
+		return this.page.cmd("fileList", [
+			"cors-" + this.address + "/" + dir, // directory
 		]).then(res => {
 			res = res.map(file => { // Crop by "/" symbol
 				if(file.indexOf("/") == -1) {
