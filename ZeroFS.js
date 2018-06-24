@@ -115,7 +115,7 @@ class ZeroFS {
 
 			str = new Uint8Array(str);
 
-			for(let i = 0; i < str.byteLength; i += 3) {
+			for(let i = 0; i <= str.byteLength - 3; i += 3) {
 				const chunk = (str[i] << 16) | (str[i + 1] << 8) | str[i + 2];
 
 				const a = (chunk & 16515072) >> 18;
