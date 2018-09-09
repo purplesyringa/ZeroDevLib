@@ -5,12 +5,16 @@
      var zeropage = new ZeroPage(zeroframe)
      var zerofs = new ZeroFS(zeropage)
      var storage = FileBackedStorage(zerofs, "data/users/" + zeroframe.site_info.auth_address + "/data.json")
-     if (await storage.$exists)
-         await storage.$load
+     if (await storage.$exists())
+         await storage.$load()
      storage["a"] = 3
-     await storage.$save$sign$publish
+     await storage.$save$sign$publish() 
+     // Or the equivalent
+     // await storage.$save()
+     // await storage.$sign()
+     // await storage.$publish()
      storage["a"] = 5
-     await storage.$load
+     await storage.$load()
      // Now storage["a"] == 3.
  })()
  */
@@ -23,37 +27,39 @@ const FileBackedStorage = (zerofs, filename) => {
 	    if (expanded.length == 1)
 		return inner[key]
 	    else {
-		// Otherwise we return a promise for the action
-		let promise = new Promise(res => res())
-		for (let method of expanded) {
-		    switch (method) {
-		    case "":
-			break
-		    case "delete":
-			promise = promise.then(() => zerofs.deleteFile(filename))
-			break
-		    case "exists":
-			promise = promise.then(() => zerofs.fileExists(filename))
-			break
-		    case "load":
-			promise = promise
-			    .then(() => zerofs.readFile(filename))
-			    .then(content => inner = JSON.parse(content))
-			break
-		    case "save":
-			promise = promise.then(() => zerofs.writeFile(filename, JSON.stringify(inner)))
-			break
-		    case "sign":
-			promise = promise.then(() => zerofs.page.sign(filename))
-			break
-		    case "publish":
-			promise = promise.then(() => zerofs.page.publish(filename))
-			break
-		    default:
-			throw "Unknown method " + method
+		return () => {
+		    // Otherwise we return a promise for the action
+		    let promise = new Promise(res => res())
+		    for (let method of expanded) {
+			switch (method) {
+			case "":
+			    break
+			case "delete":
+			    promise = promise.then(() => zerofs.deleteFile(filename))
+			    break
+			case "exists":
+			    promise = promise.then(() => zerofs.fileExists(filename))
+			    break
+			case "load":
+			    promise = promise
+				.then(() => zerofs.readFile(filename))
+				.then(content => inner = JSON.parse(content))
+			    break
+			case "save":
+			    promise = promise.then(() => zerofs.writeFile(filename, JSON.stringify(inner)))
+			    break
+			case "sign":
+			    promise = promise.then(() => zerofs.page.sign(filename))
+			    break
+			case "publish":
+			    promise = promise.then(() => zerofs.page.publish(filename))
+			    break
+			default:
+			    throw "Unknown method " + method
+			}
 		    }
+		    return promise
 		}
-		return promise
 	    }
 	},
 	set: (inner, key, value) => {
