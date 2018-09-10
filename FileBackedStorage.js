@@ -20,66 +20,66 @@
  */
 
 const FileBackedStorage = (zerofs, filename) => {
-    var handler = {
+	var handler = {
 	get: (inner, key) => {
-	    // If key is without $ we return its property
-	    let expanded = key.split("$")
-	    if (expanded.length == 1)
+		// If key is without $ we return its property
+		let expanded = key.split("$")
+		if (expanded.length == 1)
 		return inner[key]
-	    else {
+		else {
 		return () => {
-		    // Otherwise we return a promise for the action
-		    let promise = new Promise(res => res())
-		    for (let method of expanded) {
+			// Otherwise we return a promise for the action
+			let promise = new Promise(res => res())
+			for (let method of expanded) {
 			switch (method) {
 			case "":
-			    break
+				break
 			case "delete":
-			    promise = promise.then(() => zerofs.deleteFile(filename))
-			    break
+				promise = promise.then(() => zerofs.deleteFile(filename))
+				break
 			case "exists":
-			    promise = promise.then(() => zerofs.fileExists(filename))
-			    break
+				promise = promise.then(() => zerofs.fileExists(filename))
+				break
 			case "load":
-			    promise = promise
+				promise = promise
 				.then(() => zerofs.readFile(filename))
 				.then(content => inner = JSON.parse(content))
-			    break
+				break
 			case "save":
-			    promise = promise.then(() => zerofs.writeFile(filename, JSON.stringify(inner)))
-			    break
+				promise = promise.then(() => zerofs.writeFile(filename, JSON.stringify(inner, null, 1)))
+				break
 			case "sign":
-			    promise = promise.then(() => zerofs.page.sign(filename))
-			    break
+				promise = promise.then(() => zerofs.page.sign(filename))
+				break
 			case "publish":
-			    promise = promise.then(() => zerofs.page.publish(filename))
-			    break
+				promise = promise.then(() => zerofs.page.publish(filename))
+				break
 			default:
-			    throw "Unknown method " + method
+				throw "Unknown method " + method
 			}
-		    }
-		    return promise
+			}
+			return promise
 		}
-	    }
+		}
 	},
 	set: (inner, key, value) => {
-	    let expanded = key.split("$")
-	    if (expanded.length == 1)
+		let expanded = key.split("$")
+		if (expanded.length == 1)
 		return inner[key] = value
-	    else
+		else
 		throw key + " is not settable!"
 	}
-    }
-    return new Proxy({}, handler)
+	}
+	return new Proxy({}, handler)
 }
 
 const FolderBackedStorage = (zerofs, folderpath) => {
-    var handler = {
+	var handler = {
 	get: (inner, key) => {
-	    if (inner[key] == undefined)
+		if (inner[key] == undefined)
 		inner[key] = FileBackedStorage(folderpath + "/" + key + ".json")
-	    return inner[key]
+		return inner[key]
 	}
-    }
-    return new Proxy({}, handler)
+	}
+	return new Proxy({}, handler)
 }
