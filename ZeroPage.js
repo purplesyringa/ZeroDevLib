@@ -230,7 +230,11 @@ class ZeroPage {
 				);
 			})
 			.then(res => {
-				if(res === "ok") {
+				if(
+					res === "ok" ||
+					res.error === "Port not opened." ||
+					res.error === "Content publish failed."
+				) {
 					return Promise.resolve(file);
 				} else {
 					return Promise.reject(res);
