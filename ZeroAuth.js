@@ -4,6 +4,7 @@ class ZeroAuth {
 			throw new Error("page should be an instance of ZeroPage");
 		}
 		this.page = page;
+		this.page.auth = this;
 
 		if(acceptedDomains) {
 			if(typeof acceptedDomains != "object" || !(acceptedDomains instanceof Array)) {

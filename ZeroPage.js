@@ -180,6 +180,10 @@ class ZeroPage {
 
 	/****************************** Site control ******************************/
 	getPrivateKey(file) {
+		if(!this.auth) {
+			return Promise.resolve("stored");
+		}
+
 		let auth = this.auth.getAuth();
 		return this.cmd("fileRules", [file])
 			.then(rules => {
