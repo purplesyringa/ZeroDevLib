@@ -291,7 +291,7 @@ class ZeroPage {
 	isFunctionCalledInside(search) { // Returns true if <search> function called function (that called isFunctionCalledInside)
 		let caller = arguments.callee.caller;
 		while(caller) {
-			if(caller == selfFunc) {
+			if(caller == search) {
 				return true;
 			}
 			caller = caller.caller;
