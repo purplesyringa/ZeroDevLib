@@ -50,7 +50,6 @@ class ZeroFrame {
     }
 
     onRequest(cmd, message) {
-        this.log("Unknown request", message)
     }
 
     response(to, result) {
