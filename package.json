@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/imachug/ZeroDevLib#readme",
   "dependencies": {
-    "workerout": "^1.0.0"
+    "workerout": "^1.0.1"
   }
 }
